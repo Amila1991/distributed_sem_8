@@ -15,5 +15,6 @@ public class DistributedConstants {
     public static String notConnected = "Not Connected";
     public static String UnRegistered = "Unregistered";
     public static int numberOfneighbours = 2;
+    public static int defaultHops = 2;
 
 }

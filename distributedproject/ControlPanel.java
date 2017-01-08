@@ -22,33 +22,35 @@ import javax.swing.AbstractButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.util.Random;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  *
  * @author Lahiru
  */
 public class ControlPanel extends javax.swing.JFrame {
-    
-    DefaultTableModel model;
+
+//    DefaultTableModel model;
     static String[] FileArr = new String[]{"Adventures of Tintin", "Jack and Jill", "Glee", "The Vampire Diarie", "King Arthur", "Windows XP", "arry Potter", "Kung Fu Panda", "Lady Gaga", "Twilight", "Windows 8", "Mission Impossible", "Turn Up The Music", "Super Mario", "American Pickers", "Microsoft Office 2010", "Happy Feet", "Modern Family", "American Idol", "Hacking for Dummies"};
     Random rand = new Random(1);
     Client client = new Client(this);
-    
+
     public void displayMessage(String message) {
         messageDisplay.append(message);
     }
-    
+
     public void initializeAll() {
         // this method check for the current coneection and take the IPV4 address. If not connected
         // to any network interface provide an error
-        jComboBox1.removeAllItems();
+        clientIPList.removeAllItems();
         Enumeration e = null;
         try {
             e = NetworkInterface.getNetworkInterfaces();
         } catch (SocketException ex) {
             System.out.println(ex.getMessage());
         }
-        
+
         while (e.hasMoreElements()) {
             NetworkInterface n = (NetworkInterface) e.nextElement();
             try {
@@ -59,30 +61,32 @@ public class ControlPanel extends javax.swing.JFrame {
                 Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
             Enumeration ee = n.getInetAddresses();
-            
+
             while (ee.hasMoreElements()) {
                 InetAddress i = (InetAddress) ee.nextElement();
                 // Filtering IPV6 addresses
                 if (i instanceof Inet4Address) {
                     // Adding IP numbers to combo box 
-                    this.jComboBox1.addItem(i.getHostAddress());
+                    this.clientIPList.addItem(i.getHostAddress());
                 }
             }
         }
-        if (jComboBox1.getItemCount() == 0) {
+        if (clientIPList.getItemCount() == 0) {
             JOptionPane.showMessageDialog(null, "You are not connected to any network interface", "System Info", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            client.setClientIp(jComboBox1.getItemAt(0));
+            client.setClientIp(clientIPList.getItemAt(0));
         }
     }
-    
+
     public ControlPanel() {
         initComponents();
         //Checking for IP address if not connected give error
         initializeAll();
-        model = (DefaultTableModel) jTable1.getModel();
+//        model = (DefaultTableModel) neighbourTable.getModel();
+        this.txtClientPort.setEditable(false);
+        this.clientIPList.setEnabled(false);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -95,19 +99,18 @@ public class ControlPanel extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtClientPort = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        clientIPList = new javax.swing.JComboBox<>();
         setupBtn = new javax.swing.JButton();
         refreshBtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
-        tmpText = new javax.swing.JTextField();
         registerBtn = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         messageDisplay = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        neighbourTable = new javax.swing.JTable();
         joinBtn = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -138,9 +141,13 @@ public class ControlPanel extends javax.swing.JFrame {
 
         jLabel5.setText("Client Port :");
 
-        txtClientPort.setText("3000");
+        txtClientPort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtClientPortActionPerformed(evt);
+            }
+        });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        clientIPList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setupBtn.setText("Setup");
         setupBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -157,10 +164,6 @@ public class ControlPanel extends javax.swing.JFrame {
         });
 
         jLabel4.setText("User Name");
-
-        txtName.setText("Bla");
-
-        tmpText.setText("temp reg ip");
 
         registerBtn.setText("Register");
         registerBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -180,26 +183,21 @@ public class ControlPanel extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel3))
                 .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtServerPort, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(clientIPList, 0, 141, Short.MAX_VALUE)
+                    .addComponent(txtClientPort)
+                    .addComponent(txtName)
+                    .addComponent(txtServerIP))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtServerIP, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tmpText, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtServerPort, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, 0, 141, Short.MAX_VALUE)
-                            .addComponent(txtClientPort)
-                            .addComponent(txtName))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(setupBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(refreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(35, 35, 35)
-                                .addComponent(registerBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                            .addComponent(setupBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(refreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(registerBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -210,23 +208,24 @@ public class ControlPanel extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtServerIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tmpText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(txtServerIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtServerPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(registerBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtServerPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(registerBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(clientIPList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(refreshBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -261,7 +260,7 @@ public class ControlPanel extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Neighbours", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(51, 51, 255))); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        neighbourTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -284,7 +283,7 @@ public class ControlPanel extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(neighbourTable);
 
         joinBtn.setText("JOIN");
         joinBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -394,7 +393,7 @@ public class ControlPanel extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -406,19 +405,19 @@ public class ControlPanel extends javax.swing.JFrame {
 
     private void setupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setupBtnActionPerformed
         try {
+            client.SetupSocket();
             client.setServerIp(txtServerIP.getText());
             client.setServerPort(Integer.parseInt(txtServerPort.getText()));
-            client.setClientIp(jComboBox1.getSelectedItem().toString());
+            client.setClientIp(clientIPList.getSelectedItem().toString());
             client.setClientPort(Integer.parseInt(txtClientPort.getText()));
             client.setUserName(txtName.getText());
-            client.SetupSocket();
             client.RunMessageGateway();
             client.SendRegisterPacket();
         } catch (Exception ex) {
             Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_setupBtnActionPerformed
-    
+
 
     private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
         initializeAll();        // TODO add your handling code here:
@@ -435,10 +434,10 @@ public class ControlPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_initializeFilesBtnActionPerformed
 
     private void joinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joinBtnActionPerformed
-        
-        int row = jTable1.getSelectedRow();
-        String IP = jTable1.getModel().getValueAt(row, 0).toString();
-        int port = Integer.parseInt(jTable1.getModel().getValueAt(row, 1).toString());
+
+        int row = neighbourTable.getSelectedRow();
+        String IP = neighbourTable.getModel().getValueAt(row, 0).toString();
+        int port = Integer.parseInt(neighbourTable.getModel().getValueAt(row, 1).toString());
         try {
             client.SendJoinPacket(IP, port);
         } catch (Exception ex) {
@@ -447,8 +446,8 @@ public class ControlPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_joinBtnActionPerformed
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
-        
-        String ClientIp = tmpText.getText();
+
+        String ClientIp = clientIPList.getSelectedItem().toString();
         int ClientPort = Integer.parseInt(txtClientPort.getText());
         String userName = txtName.getText();
         try {
@@ -457,6 +456,10 @@ public class ControlPanel extends javax.swing.JFrame {
             Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_registerBtnActionPerformed
+
+    private void txtClientPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClientPortActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtClientPortActionPerformed
 
 //    /**
 //     * @param args the command line arguments
@@ -492,10 +495,17 @@ public class ControlPanel extends javax.swing.JFrame {
 //            }
 //        });
 //    }
+    public JTextField getTxtClientPort() {
+        return txtClientPort;
+    }
+
+    public DefaultTableModel getNeighbourTable() {
+        return (DefaultTableModel) neighbourTable.getModel();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> clientIPList;
     private javax.swing.JButton initializeFilesBtn;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -510,14 +520,13 @@ public class ControlPanel extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JButton joinBtn;
     private javax.swing.JTextArea messageDisplay;
     private javax.swing.JTextArea myFileList;
+    private javax.swing.JTable neighbourTable;
     private javax.swing.JButton refreshBtn;
     private javax.swing.JButton registerBtn;
     private javax.swing.JButton setupBtn;
-    private javax.swing.JTextField tmpText;
     private javax.swing.JTextField txtClientPort;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtNumFiles;

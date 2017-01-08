@@ -9,19 +9,20 @@ package distributedproject;
  *
  * @author lahiru
  */
-public class MessageDecoder {
+public class MessageDecoder extends RequestHandler {
 
-    ControlPanel mainWindow;
     private String receivedIp;
     private int receivedPort;
     private final RoutingTable table;
+    private CommunicationProtocol protocol;
 
     public MessageDecoder(ControlPanel mainWindow) {
-        this.mainWindow = mainWindow;
+        super(mainWindow);
         table = RoutingTable.getInstance();
+        protocol = CommunicationProtocol.getInstance();
     }
 
-    public void DecodeMessage(String msg, String receivedIp, int receivedPort) {
+    public void DecodeMessage(String msg, String receivedIp, int receivedPort) throws Exception {
         if (receivedIp != null && receivedPort >= 0) {
             this.receivedIp = receivedIp;
             this.receivedPort = receivedPort;
@@ -47,16 +48,6 @@ public class MessageDecoder {
 
     }
 
-//    private void DecodeMsg_Reg(String msg) {
-//        String[] arr = msg.split(" ");
-//        int numNeighbours = Integer.parseInt(arr[2]);
-//        if (numNeighbours > 0 && numNeighbours < 3) {
-//            for (int i = 0; i < numNeighbours; i++) {
-//                Object[] newRecord = {arr[3 + 2 * i], arr[4 + 2 * i]};
-//                mainWindow.model.addRow(newRecord);
-//            }
-//        }
-//    }
     private void registerResponse(String message) {
         String buffer[] = message.split(" ");
         int neighboursCount = Integer.parseInt(buffer[2]);
@@ -64,8 +55,7 @@ public class MessageDecoder {
         if (neighboursCount > 0 && neighboursCount <= DistributedConstants.numberOfneighbours) {
             for (int i = 0; i < neighboursCount; i++) {
                 table.addNeighBour(buffer[3 + 2 * i], Integer.parseInt(buffer[4 + 2 * i]));
-                Object[] newRecord = {buffer[3 + 2 * i] + ":" + buffer[4 + 2 * i], DistributedConstants.notConnected};
-                mainWindow.model.addRow(newRecord);
+                updateRoutingTable(table, mainWindow);
             }
         }
     }
@@ -120,14 +110,42 @@ public class MessageDecoder {
             for (int i = 0; i < fileCount; i++) {
                 System.out.println(buffer[6 + i]);
             }
-
         }
     }
 
-    private void handleJoinRequest(String message) {
+    private void handleJoinRequest(String message) throws Exception {
+
+        String buffer[] = message.split(" ");
+        String ipOfRequestedNode = buffer[2];
+        String responseMessage;
+        int portOfRequestedNode = Integer.parseInt(buffer[3]);
+
+        if (ipOfRequestedNode.equals(receivedIp) && receivedPort == portOfRequestedNode) {
+            this.table.getNeighbouringTable().put(ipOfRequestedNode + ":" + portOfRequestedNode, DistributedConstants.connected);
+            updateRoutingTable(table, mainWindow);
+            responseMessage = protocol.joinResponse(0);
+        } else {
+            responseMessage = protocol.joinResponse(9999);
+        }
+
+        SendMessage(responseMessage, ipOfRequestedNode, portOfRequestedNode);
     }
 
-    private void handleLeaveRequest(String message) {
+    private void handleLeaveRequest(String message) throws Exception {
+        String buffer[] = message.split(" ");
+        String ipOfRequestedNode = buffer[2];
+        String responseMessage;
+        int portOfRequestedNode = Integer.parseInt(buffer[3]);
+
+        if (ipOfRequestedNode.equals(receivedIp) && receivedPort == portOfRequestedNode) {
+            this.table.removeNeighbour(ipOfRequestedNode, portOfRequestedNode);
+            updateRoutingTable(table, mainWindow);
+            responseMessage = protocol.leaveResponse(0);
+        } else {
+            responseMessage = protocol.leaveResponse(9999);
+        }
+
+        SendMessage(responseMessage, ipOfRequestedNode, portOfRequestedNode);
     }
 
     private void handleSearchRequest(String message) {
