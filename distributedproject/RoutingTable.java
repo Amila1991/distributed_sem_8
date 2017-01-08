@@ -28,15 +28,15 @@ public class RoutingTable {
     }
 
     public synchronized void addNeighBour(String ip, int port) {
-        this.neighbouringTable.put(ip + port, DistributedConstants.notConnected);
+        this.neighbouringTable.put(ip +":"+ port, DistributedConstants.notConnected);
     }
 
     public synchronized void removeNeighbour(String ip, int port) {
-        this.neighbouringTable.remove(ip + port);
+        this.neighbouringTable.remove(ip +":"+ port);
     }
 
     public synchronized void updateNeighbourState(String ip, int port, String status) {
-        this.neighbouringTable.put(ip + port, status);
+        this.neighbouringTable.put(ip +":"+ port, status);
     }
 
     public synchronized void addFile(String fileName) {

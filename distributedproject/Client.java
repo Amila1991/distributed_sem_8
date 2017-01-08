@@ -10,20 +10,22 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author lahiru
  */
-public class Client {
+public class Client extends RequestHandler {
 
     private String serverIp = "";
     private String ClientIp = "";
     private int ClientPort;
     private int serverPort;
     private String userName = "";
-    public ControlPanel mainWindow;
-    public DatagramSocket socket;
+
     public MessageDecoder msgDecoder;
     private final CommunicationProtocol protocol;
     private final RoutingTable routingTable;
@@ -69,31 +71,10 @@ public class Client {
     }
 
     public Client(ControlPanel mainWindow) {
-        this.mainWindow = mainWindow;
+        super(mainWindow);
         msgDecoder = new MessageDecoder(mainWindow);
         protocol = CommunicationProtocol.getInstance();
         routingTable = RoutingTable.getInstance();
-    }
-
-    public void SetupSocket() {
-        try {
-            socket = new DatagramSocket();
-        } catch (SocketException soe) {
-            soe.printStackTrace();
-        }
-    }
-
-    public void SendMessage(String message, String Dest_Ip, int Dest_port) throws Exception {
-
-        mainWindow.displayMessage('\n' + "OUT - " + message);
-        byte[] buf = message.getBytes();
-        try {
-            InetAddress address = InetAddress.getByName(Dest_Ip);
-            DatagramPacket packet = new DatagramPacket(buf, buf.length, address, Dest_port);
-            socket.send(packet);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     //this is the genuine method
@@ -115,29 +96,44 @@ public class Client {
 
     }
 
+    public void searchFile(String fileName) throws Exception {
+        String tempMessage = protocol.searchFile(this.ClientIp, this.ClientPort, DistributedConstants.defaultHops, fileName);
+        Iterator<String> iterator = routingTable.getNeighbouringTable().keySet().iterator();
+        String tempKey;
+
+        while (iterator.hasNext()) {
+            tempKey = iterator.next();
+            if (routingTable.getNeighbouringTable().get(tempKey).equals(DistributedConstants.connected)) {
+                String[] temp = tempKey.split(":");
+                SendMessage(tempMessage, temp[0], Integer.parseInt(temp[1]));
+            }
+        }
+
+    }
+
     public void RunMessageGateway() {
         Thread T = new Thread() {
             public void run() {
-                whileRunning();
+                try {
+                    whileRunning();
+                } catch (Exception ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         };
         T.start();
     }
 
-    public void whileRunning() {
+    public void whileRunning() throws Exception {
+        DatagramPacket incomingPacket;
         while (true) {
-            byte[] buffer = new byte[65536];
-            DatagramPacket incoming = new DatagramPacket(buffer, buffer.length);
-            try {
-                socket.receive(incoming);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            byte[] data = incoming.getData();
-            String s = new String(data, 0, incoming.getLength());
+            incomingPacket = receiveMessage();
+            byte[] data = incomingPacket.getData();
+            String s = new String(data, 0, incomingPacket.getLength());
             //echo the details of incoming data - client ip : client port - client message
             mainWindow.displayMessage('\n' + "IN - " + s);
-            msgDecoder.DecodeMessage(s, incoming.getAddress().toString(), incoming.getPort());
+            msgDecoder.DecodeMessage(s, incomingPacket.getAddress().toString(), incomingPacket.getPort());
         }
     }
+
 }
