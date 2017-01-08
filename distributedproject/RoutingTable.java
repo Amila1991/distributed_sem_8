@@ -64,10 +64,13 @@ public class RoutingTable {
         Iterator<String> fileIterator;
         for (int i = 0; i < tempKeywords.length; i++) {
             fileList = this.fileMap.get(tempKeywords[i]);
-            fileIterator = fileList.iterator();
+            for (String string : fileList) {
+                tempSet.add(string);
+            }
+/*            fileIterator = fileList.iterator();
             while (fileIterator.hasNext()) {
                 tempSet.add(fileIterator.next());
-            }
+            }*/
         }
         return tempSet;
     }
