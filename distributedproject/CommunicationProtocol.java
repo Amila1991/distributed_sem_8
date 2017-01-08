@@ -5,6 +5,8 @@
  */
 package distributedproject;
 
+import java.text.NumberFormat;
+
 /**
  *
  * @author yellowflash
@@ -85,17 +87,22 @@ public class CommunicationProtocol {
     private String validateMessage(String message) throws Exception {
         int messageLength = message.length() + 5;
 
-        if (messageLength < 10) {
-            message = "000" + messageLength + message;
-        } else if (messageLength >= 10 && messageLength < 100) {
-            message = "00" + messageLength + message;
-        } else if (messageLength >= 100 && messageLength < 1000) {
-            message = "0" + messageLength + message;
-        } else if (messageLength >= 1000 && messageLength < 10000) {
-            message = messageLength + message;
-        } else {
+        NumberFormat nf = NumberFormat.getInstance();
+        if(messageLength >= 10000)
             throw new Exception("Invalid Message Length");
-        }
+        nf.setMinimumIntegerDigits(4);
+        message = nf.format(messageLength) + message;
+//        if (messageLength < 10) {
+//            message = "000" + messageLength + message;
+//        } else if (messageLength >= 10 && messageLength < 100) {
+//            message = "00" + messageLength + message;
+//        } else if (messageLength >= 100 && messageLength < 1000) {
+//            message = "0" + messageLength + message;
+//        } else if (messageLength >= 1000 && messageLength < 10000) {
+//            message = messageLength + message;
+//        } else {
+//            throw new Exception("Invalid Message Length");
+//        }
         return message;
     }
 }
