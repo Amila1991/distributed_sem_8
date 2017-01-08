@@ -36,7 +36,6 @@ public abstract class RequestHandler {
     }
 
     public void SendMessage(String message, String Dest_Ip, int Dest_port) throws Exception {
-
         mainWindow.displayMessage('\n' + "OUT - " + message);
         byte[] buf = message.getBytes();
         try {
