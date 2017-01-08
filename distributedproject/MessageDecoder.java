@@ -5,6 +5,10 @@
  */
 package distributedproject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  *
  * @author lahiru
@@ -148,6 +152,45 @@ public class MessageDecoder extends RequestHandler {
         SendMessage(responseMessage, ipOfRequestedNode, portOfRequestedNode);
     }
 
-    private void handleSearchRequest(String message) {
+    private void handleSearchRequest(String message) throws Exception {
+        String buffer[] = message.split(" ");
+        String ipOfRequestedNode = buffer[2];
+        String fileName = buffer[4];
+        int fileCount = 0;
+        int portOfRequestedNode = Integer.parseInt(buffer[3]);
+        int hopCount = Integer.parseInt(buffer[5]);
+        String fileList = "";
+        List<String> list;
+        hopCount++;
+        if (hopCount <= DistributedConstants.defaultHops) {
+            String[] keywords = fileName.split("_");
+            for (int i = 0; i < keywords.length; i++) {
+                list = table.getFileMap().get(keywords[i]);
+                for (int j = 0; j < list.size(); j++) {
+                    String tempFileName = list.get(i);
+                    if (fileList.contains(tempFileName)) {
+                        fileList += tempFileName + " ";
+                        fileCount++;
+                    }
+                }
+            }
+            String fileRequestMsg = protocol.searchFile(ipOfRequestedNode, portOfRequestedNode, hopCount, fileName);
+            Iterator<String> iterator = table.getNeighbouringTable().keySet().iterator();
+            String tempKey;
+            while (iterator.hasNext()) {
+                tempKey = iterator.next();
+                if (table.getNeighbouringTable().get(tempKey).equals(DistributedConstants.connected)
+                        && !tempKey.equals(receivedIp + ":" + receivedPort)) {
+                    String[] temp = tempKey.split(":");
+                    SendMessage(fileRequestMsg, temp[0], Integer.parseInt(temp[1]));
+                }
+            }
+        }
+
+        if (fileList.length() > 0) {
+            String searchResponse = protocol.searchResponse(fileCount, RequestHandler.socket.getInetAddress().toString(), RequestHandler.socket.getPort(), hopCount, fileList);
+            SendMessage(searchResponse, ipOfRequestedNode, portOfRequestedNode);
+        }
+
     }
 }

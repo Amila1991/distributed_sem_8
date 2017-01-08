@@ -97,7 +97,7 @@ public class Client extends RequestHandler {
     }
 
     public void searchFile(String fileName) throws Exception {
-        String tempMessage = protocol.searchFile(this.ClientIp, this.ClientPort, DistributedConstants.defaultHops, fileName);
+        String tempMessage = protocol.searchFile(this.ClientIp, this.ClientPort, 0, fileName);
         Iterator<String> iterator = routingTable.getNeighbouringTable().keySet().iterator();
         String tempKey;
 

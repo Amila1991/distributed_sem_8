@@ -40,7 +40,7 @@ public class RoutingTable {
     }
 
     public synchronized void addFile(String fileName) {
-        String[] temp = fileName.split(" ");
+        String[] temp = fileName.split("_");
         List<String> fileList;
         ArrayList<String> content;
         for (int i = 0; i < temp.length; i++) {

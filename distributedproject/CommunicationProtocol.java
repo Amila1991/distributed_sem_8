@@ -60,13 +60,14 @@ public class CommunicationProtocol {
         return validateMessage(message);
     }
 
-    public String searchResponse(int fileCount, String IP, int port, int requiredHops, String[] fileNameArray) throws Exception {
+    public String searchResponse(int fileCount, String IP, int port, int requiredHops, String fileNameArray) throws Exception {
         String message = " SEROK " + fileCount + " " + IP + " " + port + " " + requiredHops;
 
         if (fileNameArray != null) {
-            for (int i = 0; i < fileNameArray.length; i++) {
-                message += " " + fileNameArray[i];
-            }
+//            for (int i = 0; i < fileNameArray.length; i++) {
+//                message += " " + fileNameArray[i];
+//            }
+            message += " " + fileNameArray;
         } else {
             fileCount = 0;
             message = " SEROK " + fileCount + " " + IP + " " + port + " " + requiredHops;
