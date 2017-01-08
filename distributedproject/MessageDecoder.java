@@ -64,7 +64,7 @@ public class MessageDecoder extends RequestHandler {
         }
     }
 
-    private void unregisterResponse(String message) {
+    private void unregisterResponse(String message) throws Exception {
         String buffer[] = message.split(" ");
         if (buffer[2] == "0") {
             /*
@@ -72,6 +72,18 @@ public class MessageDecoder extends RequestHandler {
              */
         } else if (buffer[2] == "1") {
             System.out.println("Unregistered");
+
+            Iterator<String> iterator = table.getNeighbouringTable().keySet().iterator();
+            String tempKey;
+            while (iterator.hasNext()) {
+                tempKey = iterator.next();
+                if (table.getNeighbouringTable().get(tempKey).equals(DistributedConstants.connected)) {
+                    String[] temp = tempKey.split(":");
+                    String fileRequestMsg = protocol.leave(RequestHandler.socket.getInetAddress().toString(), RequestHandler.socket.getPort());
+                    SendMessage(fileRequestMsg, temp[0], Integer.parseInt(temp[1]));
+                }
+            }
+
         }
     }
 
@@ -99,6 +111,7 @@ public class MessageDecoder extends RequestHandler {
              */
         } else if (buffer[2] == "1") {
             System.out.println("Succesfully Left");
+
         }
     }
 //assume file hosted node directly communicate with requested node
@@ -112,7 +125,7 @@ public class MessageDecoder extends RequestHandler {
             int requiredHops = Integer.parseInt(buffer[5]);
 
             for (int i = 0; i < fileCount; i++) {
-                System.out.println(buffer[6 + i]);
+                mainWindow.getDisplaySearchResult().append(buffer[6 + i] + "\n");
             }
         }
     }

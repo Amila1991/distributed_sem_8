@@ -88,7 +88,7 @@ public class CommunicationProtocol {
      * @throws Exception
      */
     private String validateMessage(String message) throws Exception {
-        int messageLength = message.length() + 4;
+        int messageLength = message.length() + 5;
 
         NumberFormat nf = NumberFormat.getInstance();
         nf.setGroupingUsed(false);

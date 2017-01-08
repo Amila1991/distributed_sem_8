@@ -111,6 +111,11 @@ public class Client extends RequestHandler {
 
     }
 
+    public void sendUnregisterRequest() throws Exception {
+        String tempMessage = protocol.unRegister(this.ClientIp, this.ClientPort, this.userName);
+        SendMessage(tempMessage, serverIp, serverPort);
+    }
+
     public void RunMessageGateway() {
         Thread T = new Thread() {
             public void run() {
