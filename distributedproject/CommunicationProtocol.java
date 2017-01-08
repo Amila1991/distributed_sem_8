@@ -85,9 +85,10 @@ public class CommunicationProtocol {
      * @throws Exception
      */
     private String validateMessage(String message) throws Exception {
-        int messageLength = message.length() + 5;
+        int messageLength = message.length() + 4;
 
         NumberFormat nf = NumberFormat.getInstance();
+        nf.setGroupingUsed(false);
         if(messageLength >= 10000)
             throw new Exception("Invalid Message Length");
         nf.setMinimumIntegerDigits(4);
