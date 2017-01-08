@@ -25,7 +25,8 @@ public class Client {
     public ControlPanel mainWindow;
     public DatagramSocket socket;
     public MessageDecoder msgDecoder;
-    private CommunicationProtocol protocol;
+    private final CommunicationProtocol protocol;
+    private final RoutingTable routingTable;
 
     public String getUserName() {
         return userName;
@@ -71,6 +72,7 @@ public class Client {
         this.mainWindow = mainWindow;
         msgDecoder = new MessageDecoder(mainWindow);
         protocol = CommunicationProtocol.getInstance();
+        routingTable = RoutingTable.getInstance();
     }
 
     public void SetupSocket() {
@@ -135,7 +137,7 @@ public class Client {
             String s = new String(data, 0, incoming.getLength());
             //echo the details of incoming data - client ip : client port - client message
             mainWindow.displayMessage('\n' + "IN - " + s);
-            msgDecoder.DecodeMessage(s);
+            msgDecoder.DecodeMessage(s, incoming.getAddress().toString(), incoming.getPort());
         }
     }
 }
