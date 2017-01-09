@@ -147,7 +147,7 @@ public class Client extends RequestHandler {
             String s = new String(data, 0, incomingPacket.getLength());
             //echo the details of incoming data - client ip : client port - client message
             mainWindow.displayMessage('\n' + "IN - " + s);
-            msgDecoder.DecodeMessage(s, incomingPacket.getAddress().toString(), incomingPacket.getPort());
+            msgDecoder.DecodeMessage(s, incomingPacket.getAddress().getHostAddress(), incomingPacket.getPort());
         }
     }
 
