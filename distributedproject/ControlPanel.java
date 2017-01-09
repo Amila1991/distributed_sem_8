@@ -74,7 +74,7 @@ public class ControlPanel extends javax.swing.JFrame {
         this.client = new Client(this);
         //Checking for IP address if not connected give error
         initializeAll();
-        client.setClientIP(clientIPList.getItemAt(0));
+        RequestHandler.clientIP = clientIPList.getItemAt(0);
         client.RunMessageGateway();
 //        model = (DefaultTableModel) neighbourTable.getModel();
         this.txtClientPort.setEditable(false);

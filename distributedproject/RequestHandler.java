@@ -23,15 +23,7 @@ public abstract class RequestHandler {
 
     public ControlPanel mainWindow;
     public static DatagramSocket socket;
-    private String clientIP;
-
-    public String getClientIP() {
-        return clientIP;
-    }
-
-    public void setClientIP(String clientIP) {
-        this.clientIP = clientIP;
-    }
+    public static String clientIP;
 
     public RequestHandler(ControlPanel mainWindow) {
         this.mainWindow = mainWindow;

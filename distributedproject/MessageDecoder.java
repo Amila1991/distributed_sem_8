@@ -78,7 +78,7 @@ public class MessageDecoder extends RequestHandler {
                 tempKey = iterator.next();
                 if (table.getNeighbouringTable().get(tempKey).equals(DistributedConstants.connected)) {
                     String[] temp = tempKey.split(":");
-                    String fileRequestMsg = protocol.leave(this.getClientIP(), RequestHandler.socket.getLocalPort());
+                    String fileRequestMsg = protocol.leave(RequestHandler.clientIP, RequestHandler.socket.getLocalPort());
                     SendMessage(fileRequestMsg, temp[0], Integer.parseInt(temp[1]));
                 }
             }
@@ -200,7 +200,7 @@ public class MessageDecoder extends RequestHandler {
         }
 
         if (fileList.length() > 0) {
-            String searchResponse = protocol.searchResponse(fileCount, this.getClientIP(), RequestHandler.socket.getLocalPort(), hopCount, fileList);
+            String searchResponse = protocol.searchResponse(fileCount, RequestHandler.clientIP, RequestHandler.socket.getLocalPort(), hopCount, fileList);
             SendMessage(searchResponse, ipOfRequestedNode, portOfRequestedNode);
         }
     }
