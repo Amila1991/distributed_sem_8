@@ -28,11 +28,11 @@ public class ControlPanel extends javax.swing.JFrame {
     static String[] FileArr = new String[]{"Adventures_of_Tintin", "Jack_and_Jill", "Glee", "The_Vampire_Diarie", "King_Arthur", "Windows_XP", "Harry_Potter", "Kung_Fu_Panda", "Lady_Gaga", "Twilight", "Windows_8", "Mission_Impossible", "Turn_Up_The_Music", "Super_Mario", "American_Pickers", "Microsoft_Office_2010", "Happy_Feet", "Modern_Family", "American_Idol", "Hacking_for_Dummies"};
     Random rand = new Random(1);
     Client client;
-
+    
     public void displayMessage(String message) {
         messageDisplay.append(message);
     }
-
+    
     public void initializeAll() {
         // this method check for the current coneection and take the IPV4 address. If not connected
         // to any network interface provide an error
@@ -43,7 +43,7 @@ public class ControlPanel extends javax.swing.JFrame {
         } catch (SocketException ex) {
             System.out.println(ex.getMessage());
         }
-
+        
         while (e.hasMoreElements()) {
             NetworkInterface n = (NetworkInterface) e.nextElement();
             try {
@@ -54,7 +54,7 @@ public class ControlPanel extends javax.swing.JFrame {
                 Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
             Enumeration ee = n.getInetAddresses();
-
+            
             while (ee.hasMoreElements()) {
                 InetAddress i = (InetAddress) ee.nextElement();
                 // Filtering IPV6 addresses
@@ -68,7 +68,7 @@ public class ControlPanel extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "You are not connected to any network interface", "System Info", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
+    
     public ControlPanel() {
         initComponents();
         this.client = new Client(this);
@@ -81,11 +81,11 @@ public class ControlPanel extends javax.swing.JFrame {
         this.clientIPList.setEnabled(false);
         this.txtFileCount.setEditable(false);
     }
-
+    
     public JTextArea getDisplaySearchResult() {
         return displaySearchResult;
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -445,7 +445,7 @@ public class ControlPanel extends javax.swing.JFrame {
     private void txtServerIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtServerIPActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtServerIPActionPerformed
-
+    
 
     private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
         initializeAll();        // TODO add your handling code here:
@@ -457,7 +457,7 @@ public class ControlPanel extends javax.swing.JFrame {
         int max = FileArr.length - 1;
         int loop = new Random().nextInt(2) + 3;
         txtFileCount.setText(loop + "");
-
+        
         for (int i = 0; i < loop; i++) {
             int randomNum = rand.nextInt(max + 1);
             RoutingTable.getInstance().addFile(FileArr[randomNum]);
@@ -466,7 +466,7 @@ public class ControlPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_initializeFilesBtnActionPerformed
 
     private void joinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joinBtnActionPerformed
-
+        
         int row = neighbourTable.getSelectedRow();
         String address[] = neighbourTable.getModel().getValueAt(row, 0).toString().split(":");
         String IP = address[0];
@@ -479,12 +479,12 @@ public class ControlPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_joinBtnActionPerformed
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
-
+        
         String userName = txtName.getText();
         client.setServerIp(txtServerIP.getText());
         client.setServerPort(Integer.parseInt(txtServerPort.getText()));
         client.setUserName(userName);
-
+        
         try {
             client.SendRegisterPacket();
         } catch (Exception ex) {
@@ -498,7 +498,7 @@ public class ControlPanel extends javax.swing.JFrame {
 
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
         String searchKey = txtSearch.getText();
-
+        displaySearchResult.setText("");
         if (searchKey != null && !searchKey.trim().isEmpty()) {
             try {
                 client.searchFile(searchKey);
@@ -554,7 +554,7 @@ public class ControlPanel extends javax.swing.JFrame {
     public JTextField getTxtClientPort() {
         return txtClientPort;
     }
-
+    
     public DefaultTableModel getNeighbourTable() {
         return (DefaultTableModel) neighbourTable.getModel();
     }
