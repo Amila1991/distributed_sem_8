@@ -18,7 +18,7 @@ public class MessageDecoder extends RequestHandler {
     private String receivedIp;
     private int receivedPort;
     private final RoutingTable table;
-    private CommunicationProtocol protocol;
+    private final CommunicationProtocol protocol;
 
     public MessageDecoder(ControlPanel mainWindow) {
         super(mainWindow);
@@ -91,7 +91,7 @@ public class MessageDecoder extends RequestHandler {
         String receivingEndState = table.getNeighbouringTable().get(this.receivedIp + this.receivedPort);
         String buffer[] = message.split(" ");
         if (receivingEndState != null) {
-            if (buffer[2] == "0") {
+            if (buffer[2] == "9999") {
                 /*
                 solution has to be a group decision
                  */
@@ -137,7 +137,7 @@ public class MessageDecoder extends RequestHandler {
         String responseMessage;
         int portOfRequestedNode = Integer.parseInt(buffer[3]);
 
-        if (ipOfRequestedNode.equals(receivedIp) && receivedPort == portOfRequestedNode) {
+        if (ipOfRequestedNode.equals(this.receivedIp) && this.receivedPort == portOfRequestedNode) {
             this.table.getNeighbouringTable().put(ipOfRequestedNode + ":" + portOfRequestedNode, DistributedConstants.connected);
             updateRoutingTable(table, mainWindow);
             responseMessage = protocol.joinResponse(0);
@@ -154,7 +154,7 @@ public class MessageDecoder extends RequestHandler {
         String responseMessage;
         int portOfRequestedNode = Integer.parseInt(buffer[3]);
 
-        if (ipOfRequestedNode.equals(receivedIp) && receivedPort == portOfRequestedNode) {
+        if (ipOfRequestedNode.equals(this.receivedIp) && this.receivedPort == portOfRequestedNode) {
             this.table.removeNeighbour(ipOfRequestedNode, portOfRequestedNode);
             updateRoutingTable(table, mainWindow);
             responseMessage = protocol.leaveResponse(0);
@@ -193,7 +193,7 @@ public class MessageDecoder extends RequestHandler {
             while (iterator.hasNext()) {
                 tempKey = iterator.next();
                 if (table.getNeighbouringTable().get(tempKey).equals(DistributedConstants.connected)
-                        && !tempKey.equals(receivedIp + ":" + receivedPort)) {
+                        && !tempKey.equals(this.receivedIp + ":" + this.receivedPort)) {
                     String[] temp = tempKey.split(":");
                     SendMessage(fileRequestMsg, temp[0], Integer.parseInt(temp[1]));
                 }
