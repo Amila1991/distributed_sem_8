@@ -35,11 +35,19 @@ public abstract class RequestHandler {
         }
     }
 
-    public void SendMessage(String message, String Dest_Ip, int Dest_port) throws Exception {
+    /**
+     * this method will send messages to the nodes in the network
+     *
+     * @param message
+     * @param Dest_IP
+     * @param Dest_port
+     * @throws Exception
+     */
+    public void SendMessage(String message, String Dest_IP, int Dest_port) throws Exception {
         mainWindow.displayMessage('\n' + "OUT - " + message);
         byte[] buf = message.getBytes();
         try {
-            InetAddress address = InetAddress.getByName(Dest_Ip);
+            InetAddress address = InetAddress.getByName(Dest_IP);
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, Dest_port);
             RequestHandler.socket.send(packet);
         } catch (Exception ex) {
@@ -47,6 +55,10 @@ public abstract class RequestHandler {
         }
     }
 
+    /**
+     * this method will be used for receive the data from the socket
+     * @return 
+     */
     public DatagramPacket receiveMessage() {
         byte[] buffer = new byte[65536];
         DatagramPacket incoming = new DatagramPacket(buffer, buffer.length);
@@ -58,6 +70,11 @@ public abstract class RequestHandler {
         return incoming;
     }
 
+    /**
+     * this method will update the routing table indicated in the GUI
+     * @param table
+     * @param mainWindow 
+     */
     public void updateRoutingTable(RoutingTable table, ControlPanel mainWindow) {
         Map<String, String> neighbourTable = table.getNeighbouringTable();
         Iterator<String> keySet = neighbourTable.keySet().iterator();

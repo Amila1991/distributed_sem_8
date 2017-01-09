@@ -60,19 +60,37 @@ public class Client extends RequestHandler {
         routingTable = RoutingTable.getInstance();
     }
 
-    // this is temporary method used to test the system
-    // using this method call we can avoid the need of multiple PCs
+    /**
+     * this method launch a register request to the BS server
+     *
+     * @throws Exception
+     */
     public void SendRegisterPacket() throws Exception {
         String tempMessage = protocol.register(RequestHandler.clientIP, RequestHandler.socket.getLocalPort(), this.userName);
         SendMessage(tempMessage, serverIp, serverPort);
     }
 
+    /**
+     * this method launch a join request to another node in the distributed
+     * network
+     *
+     * @param NodeIp
+     * @param nodePort
+     * @throws Exception
+     */
     public void SendJoinPacket(String NodeIp, int nodePort) throws Exception {
         String tempMessage = protocol.join(RequestHandler.clientIP, RequestHandler.socket.getLocalPort());
         SendMessage(tempMessage, NodeIp, nodePort);
 
     }
 
+    /**
+     * this method first search file it self and make a request to the other
+     * neighbors
+     *
+     * @param fileName
+     * @throws Exception
+     */
     public void searchFile(String fileName) throws Exception {
 
         String tempKeywords[] = fileName.split(" ");
@@ -106,11 +124,19 @@ public class Client extends RequestHandler {
 
     }
 
+    /**
+     * this method invokes a unregister request
+     *
+     * @throws Exception
+     */
     public void sendUnregisterRequest() throws Exception {
         String tempMessage = protocol.unRegister(RequestHandler.clientIP, RequestHandler.socket.getLocalPort(), this.userName);
         SendMessage(tempMessage, serverIp, serverPort);
     }
 
+    /**
+     * this method will create a thread to listen to the port
+     */
     public void RunMessageGateway() {
         Thread T = new Thread() {
             public void run() {
@@ -124,6 +150,11 @@ public class Client extends RequestHandler {
         T.start();
     }
 
+    /**
+     * listening to the port
+     *
+     * @throws Exception
+     */
     public void whileRunning() throws Exception {
         DatagramPacket incomingPacket;
         while (true) {

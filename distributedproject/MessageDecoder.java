@@ -26,6 +26,15 @@ public class MessageDecoder extends RequestHandler {
         protocol = CommunicationProtocol.getInstance();
     }
 
+    /**
+     * message decode gate way. appropriate method will be invoked according to
+     * the response
+     *
+     * @param msg
+     * @param receivedIp
+     * @param receivedPort
+     * @throws Exception
+     */
     public void DecodeMessage(String msg, String receivedIp, int receivedPort) throws Exception {
         if (receivedIp != null && receivedPort >= 0) {
             this.receivedIp = receivedIp;
@@ -51,6 +60,11 @@ public class MessageDecoder extends RequestHandler {
         }
     }
 
+    /**
+     * method will handle the register response
+     *
+     * @param message
+     */
     private void registerResponse(String message) {
         String buffer[] = message.split(" ");
         int neighboursCount = Integer.parseInt(buffer[2]);
@@ -63,6 +77,12 @@ public class MessageDecoder extends RequestHandler {
         }
     }
 
+    /**
+     * method will handle the response of the unregister request
+     *
+     * @param message
+     * @throws Exception
+     */
     private void unregisterResponse(String message) throws Exception {
         String buffer[] = message.split(" ");
         System.out.println(message);
@@ -87,6 +107,11 @@ public class MessageDecoder extends RequestHandler {
         }
     }
 
+    /**
+     * method will handle the response if the join request
+     *
+     * @param message
+     */
     private void joinResponse(String message) {
         String receivingEndState = table.getNeighbouringTable().get(this.receivedIp + ":" + this.receivedPort);
         String buffer[] = message.split(" ");
@@ -103,6 +128,11 @@ public class MessageDecoder extends RequestHandler {
         }
     }
 
+    /**
+     * leave response will be handled
+     *
+     * @param message
+     */
     private void leaveResponse(String message) {
         String buffer[] = message.split(" ");
         if (buffer[2].equals("9999")) {
@@ -113,8 +143,12 @@ public class MessageDecoder extends RequestHandler {
             System.out.println("Succesfully Left");
         }
     }
-//assume file hosted node directly communicate with requested node
 
+    /**
+     * search response will be handled
+     *
+     * @param message
+     */
     private void searchResponse(String message) {
         String buffer[] = message.split(" ");
         int fileCount = Integer.parseInt(buffer[2]);
@@ -129,6 +163,13 @@ public class MessageDecoder extends RequestHandler {
         }
     }
 
+    /**
+     * join request will be handled. according to the new join requests the
+     * routing table is updated
+     *
+     * @param message
+     * @throws Exception
+     */
     private void handleJoinRequest(String message) throws Exception {
 
         String buffer[] = message.split(" ");
@@ -147,6 +188,13 @@ public class MessageDecoder extends RequestHandler {
         SendMessage(responseMessage, ipOfRequestedNode, portOfRequestedNode);
     }
 
+    /**
+     * leave request will be handled. this method will not be called manually.
+     * this method is invoked by the unregister response
+     *
+     * @param message
+     * @throws Exception
+     */
     private void handleLeaveRequest(String message) throws Exception {
         String buffer[] = message.split(" ");
         String ipOfRequestedNode = buffer[2];
@@ -164,6 +212,14 @@ public class MessageDecoder extends RequestHandler {
         SendMessage(responseMessage, ipOfRequestedNode, portOfRequestedNode);
     }
 
+    /**
+     * this method will consist the file searching algorithm. currently the
+     * maximum number of hops is two and when they reach the hop limit request
+     * chain is discarded automatically.
+     *
+     * @param message
+     * @throws Exception
+     */
     private void handleSearchRequest(String message) throws Exception {
         String buffer[] = message.split("'");
         String buffer_1[] = message.split(" ");
