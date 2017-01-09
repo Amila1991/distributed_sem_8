@@ -12,6 +12,8 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,17 +24,14 @@ public abstract class RequestHandler {
     public ControlPanel mainWindow;
     public static DatagramSocket socket;
 
-    public void SetupSocket() {
-        try {
-            RequestHandler.socket = new DatagramSocket();
-            this.mainWindow.getTxtClientPort().setText("" + RequestHandler.socket.getLocalPort());
-        } catch (SocketException soe) {
-            soe.printStackTrace();
-        }
-    }
-
     public RequestHandler(ControlPanel mainWindow) {
         this.mainWindow = mainWindow;
+        try {
+            RequestHandler.socket = new DatagramSocket();
+        } catch (SocketException ex) {
+            Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.mainWindow.getTxtClientPort().setText("" + RequestHandler.socket.getLocalPort());
     }
 
     public void SendMessage(String message, String Dest_Ip, int Dest_port) throws Exception {

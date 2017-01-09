@@ -33,7 +33,7 @@ public class CommunicationProtocol {
     }
 
     public String unRegister(String IP, int port, String userName) throws Exception {
-        String message = " REG " + IP + " " + port + " " + userName;
+        String message = " UNREG " + IP + " " + port + " " + userName;
         return validateMessage(message);
     }
 

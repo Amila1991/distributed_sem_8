@@ -99,7 +99,6 @@ public class ControlPanel extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtClientPort = new javax.swing.JTextField();
         clientIPList = new javax.swing.JComboBox<>();
-        setupBtn = new javax.swing.JButton();
         refreshBtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
@@ -153,13 +152,6 @@ public class ControlPanel extends javax.swing.JFrame {
             }
         });
 
-        setupBtn.setText("Setup");
-        setupBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setupBtnActionPerformed(evt);
-            }
-        });
-
         refreshBtn.setText("Refresh");
         refreshBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -202,7 +194,6 @@ public class ControlPanel extends javax.swing.JFrame {
                     .addComponent(txtServerIP))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(setupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
                     .addComponent(refreshBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
                     .addComponent(registerBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(unregisterBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -237,9 +228,8 @@ public class ControlPanel extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(txtClientPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(setupBtn))
-                .addGap(14, 14, 14))
+                    .addComponent(txtClientPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Message Log", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(51, 51, 255))); // NOI18N
@@ -408,7 +398,7 @@ public class ControlPanel extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -456,21 +446,6 @@ public class ControlPanel extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtServerIPActionPerformed
 
-    private void setupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setupBtnActionPerformed
-        try {
-            client.SetupSocket();
-            client.setServerIp(txtServerIP.getText());
-            client.setServerPort(Integer.parseInt(txtServerPort.getText()));
-            client.setClientIp(clientIPList.getSelectedItem().toString());
-            client.setClientPort(Integer.parseInt(txtClientPort.getText()));
-            client.setUserName(txtName.getText());
-            client.RunMessageGateway();
-            client.SendRegisterPacket();
-        } catch (Exception ex) {
-            Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_setupBtnActionPerformed
-
 
     private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
         initializeAll();        // TODO add your handling code here:
@@ -508,6 +483,12 @@ public class ControlPanel extends javax.swing.JFrame {
         String ClientIp = clientIPList.getSelectedItem().toString();
         int ClientPort = Integer.parseInt(txtClientPort.getText());
         String userName = txtName.getText();
+        client.setClientIp(ClientIp);
+        client.setClientPort(ClientPort);
+        client.setServerIp(txtServerIP.getText());
+        client.setServerPort(Integer.parseInt(txtClientPort.getText()));
+        client.setUserName(userName);
+
         try {
             client.SendRegisterPacket();
         } catch (Exception ex) {
@@ -610,7 +591,6 @@ public class ControlPanel extends javax.swing.JFrame {
     private javax.swing.JButton refreshBtn;
     private javax.swing.JButton registerBtn;
     private javax.swing.JButton searchBtn;
-    private javax.swing.JButton setupBtn;
     private javax.swing.JTextField txtClientPort;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtNumFiles;
