@@ -28,7 +28,7 @@ public class ControlPanel extends javax.swing.JFrame {
 //    DefaultTableModel model;
     static String[] FileArr = new String[]{"Adventures_of_Tintin", "Jack_and_Jill", "Glee", "The_Vampire_Diarie", "King_Arthur", "Windows_XP", "Harry_Potter", "Kung_Fu_Panda", "Lady_Gaga", "Twilight", "Windows_8", "Mission_Impossible", "Turn_Up_The_Music", "Super_Mario", "American_Pickers", "Microsoft_Office_2010", "Happy_Feet", "Modern_Family", "American_Idol", "Hacking_for_Dummies"};
     Random rand = new Random(1);
-    Client client = new Client(this);
+    Client client;
 
     public void displayMessage(String message) {
         messageDisplay.append(message);
@@ -74,12 +74,14 @@ public class ControlPanel extends javax.swing.JFrame {
 
     public ControlPanel() {
         initComponents();
+        this.client = new Client(this);
+
         //Checking for IP address if not connected give error
         initializeAll();
 //        model = (DefaultTableModel) neighbourTable.getModel();
         this.txtClientPort.setEditable(false);
         this.clientIPList.setEnabled(false);
-        this.txtNumFiles.setEditable(false);
+        this.txtFileCount.setEditable(false);
     }
 
     public JTextArea getDisplaySearchResult() {
@@ -116,7 +118,7 @@ public class ControlPanel extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         myFileList = new javax.swing.JTextArea();
         initializeFilesBtn = new javax.swing.JButton();
-        txtNumFiles = new javax.swing.JTextField();
+        txtFileCount = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
@@ -357,7 +359,7 @@ public class ControlPanel extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(1, 1, 1)
-                        .addComponent(txtNumFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtFileCount, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(initializeFilesBtn)))
                 .addContainerGap(13, Short.MAX_VALUE))
@@ -367,7 +369,7 @@ public class ControlPanel extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtNumFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFileCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(initializeFilesBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -454,8 +456,8 @@ public class ControlPanel extends javax.swing.JFrame {
     private void initializeFilesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_initializeFilesBtnActionPerformed
         myFileList.setText("");
         int max = FileArr.length - 1;
-        int loop = new Random(2).nextInt() + 3;
-        txtNumFiles.setText(loop + "");
+        int loop = new Random().nextInt(2) + 3;
+        txtFileCount.setText(loop + "");
 
         for (int i = 0; i < loop; i++) {
             int randomNum = rand.nextInt(max + 1);
@@ -592,8 +594,8 @@ public class ControlPanel extends javax.swing.JFrame {
     private javax.swing.JButton registerBtn;
     private javax.swing.JButton searchBtn;
     private javax.swing.JTextField txtClientPort;
+    private javax.swing.JTextField txtFileCount;
     private javax.swing.JTextField txtName;
-    private javax.swing.JTextField txtNumFiles;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtServerIP;
     private javax.swing.JTextField txtServerPort;

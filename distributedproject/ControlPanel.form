@@ -404,7 +404,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel6" min="-2" pref="187" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                          <Component id="txtNumFiles" min="-2" pref="47" max="-2" attributes="0"/>
+                          <Component id="txtFileCount" min="-2" pref="47" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Component id="initializeFilesBtn" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -418,7 +418,7 @@
               <Group type="102" alignment="1" attributes="0">
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtNumFiles" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtFileCount" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="initializeFilesBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -458,7 +458,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="initializeFilesBtnActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtNumFiles">
+        <Component class="javax.swing.JTextField" name="txtFileCount">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>

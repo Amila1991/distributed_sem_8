@@ -92,16 +92,19 @@ public class Client extends RequestHandler {
     }
 
     public void searchFile(String fileName) throws Exception {
-
+       
         String tempKeywords[] = fileName.split(" ");
         List<String> list;
         String fileList = "";
         for (int i = 0; i < tempKeywords.length; i++) {
             list = routingTable.getFileMap().get(tempKeywords[i]);
+           
             for (int j = 0; j < list.size(); j++) {
                 String tempFileName = list.get(i);
-                if (fileList.contains(tempFileName)) {
+                 System.out.println(tempFileName);
+                if (!fileList.contains(tempFileName)) {
                     fileList += tempFileName + " ";
+                     System.out.println("Sankalpa");
                     mainWindow.getDisplaySearchResult().append(tempFileName + " == " + this.ClientIp + ":" + this.ClientPort + "\n");
                 }
             }

@@ -44,7 +44,7 @@ public class RoutingTable {
         List<String> fileList;
         ArrayList<String> content;
         for (int i = 0; i < temp.length; i++) {
-            System.out.println(temp[i]);
+//            System.out.println(temp[i]);
             fileList = this.fileMap.get(temp[i]);
             if (fileList == null) {
                 content = new ArrayList<>();

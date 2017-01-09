@@ -49,7 +49,6 @@ public class MessageDecoder extends RequestHandler {
         } else if (msg.contains("SER")) {
             handleSearchRequest(msg);
         }
-
     }
 
     private void registerResponse(String message) {
@@ -166,12 +165,13 @@ public class MessageDecoder extends RequestHandler {
     }
 
     private void handleSearchRequest(String message) throws Exception {
-        String buffer[] = message.split(" ");
-        String ipOfRequestedNode = buffer[2];
-        String fileName = buffer[4];
+        String buffer[] = message.split("'");
+        String buffer_1[] = message.split(" ");
+        String ipOfRequestedNode = buffer_1[2];
+        String fileName = buffer[1];
         int fileCount = 0;
-        int portOfRequestedNode = Integer.parseInt(buffer[3]);
-        int hopCount = Integer.parseInt(buffer[5]);
+        int portOfRequestedNode = Integer.parseInt(buffer_1[3]);
+        int hopCount = Integer.parseInt(buffer_1[buffer_1.length - 1]);
         String fileList = "";
         List<String> list;
         hopCount++;
@@ -204,6 +204,5 @@ public class MessageDecoder extends RequestHandler {
             String searchResponse = protocol.searchResponse(fileCount, RequestHandler.socket.getLocalAddress().getHostAddress(), RequestHandler.socket.getLocalPort(), hopCount, fileList);
             SendMessage(searchResponse, ipOfRequestedNode, portOfRequestedNode);
         }
-
     }
 }
