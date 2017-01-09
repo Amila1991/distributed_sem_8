@@ -86,7 +86,7 @@ public class Client extends RequestHandler {
     }
 
     public void SendJoinPacket(String NodeIp, int nodePort) throws Exception {
-        String tempMessage = protocol.join(NodeIp, nodePort);
+        String tempMessage = protocol.join(this.ClientIp, this.ClientPort);
         SendMessage(tempMessage, NodeIp, nodePort);
 
     }
