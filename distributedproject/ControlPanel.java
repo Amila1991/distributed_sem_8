@@ -10,7 +10,6 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -67,8 +66,6 @@ public class ControlPanel extends javax.swing.JFrame {
         }
         if (clientIPList.getItemCount() == 0) {
             JOptionPane.showMessageDialog(null, "You are not connected to any network interface", "System Info", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            client.setClientIp(clientIPList.getItemAt(0));
         }
     }
 
@@ -455,6 +452,7 @@ public class ControlPanel extends javax.swing.JFrame {
 
     private void initializeFilesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_initializeFilesBtnActionPerformed
         myFileList.setText("");
+        RoutingTable.getInstance().getFileMap().clear();
         int max = FileArr.length - 1;
         int loop = new Random().nextInt(2) + 3;
         txtFileCount.setText(loop + "");
@@ -472,7 +470,6 @@ public class ControlPanel extends javax.swing.JFrame {
         String address[] = neighbourTable.getModel().getValueAt(row, 0).toString().split(":");
         String IP = address[0];
         int port = Integer.parseInt(address[1]);
-//        int port = Integer.parseInt(neighbourTable.getModel().getValueAt(row, 1).toString());
         try {
             client.SendJoinPacket(IP, port);
         } catch (Exception ex) {
@@ -482,11 +479,7 @@ public class ControlPanel extends javax.swing.JFrame {
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
 
-        String ClientIp = clientIPList.getSelectedItem().toString();
-        int ClientPort = Integer.parseInt(txtClientPort.getText());
         String userName = txtName.getText();
-        client.setClientIp(ClientIp);
-        client.setClientPort(ClientPort);
         client.setServerIp(txtServerIP.getText());
         client.setServerPort(Integer.parseInt(txtClientPort.getText()));
         client.setUserName(userName);

@@ -22,8 +22,6 @@ import java.util.logging.Logger;
 public class Client extends RequestHandler {
 
     private String serverIp = "";
-    private String ClientIp = "";
-    private int ClientPort;
     private int serverPort;
     private String userName = "";
 
@@ -37,22 +35,6 @@ public class Client extends RequestHandler {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getClientIp() {
-        return ClientIp;
-    }
-
-    public void setClientIp(String ClientIp) {
-        this.ClientIp = ClientIp;
-    }
-
-    public int getClientPort() {
-        return ClientPort;
-    }
-
-    public void setClientPort(int ClientPort) {
-        this.ClientPort = ClientPort;
     }
 
     public String getServerIp() {
@@ -81,36 +63,37 @@ public class Client extends RequestHandler {
     // this is temporary method used to test the system
     // using this method call we can avoid the need of multiple PCs
     public void SendRegisterPacket() throws Exception {
-        String tempMessage = protocol.register(this.ClientIp, this.ClientPort, this.userName);
+        String tempMessage = protocol.register(RequestHandler.socket.getLocalAddress().getHostAddress(), RequestHandler.socket.getLocalPort(), this.userName);
         SendMessage(tempMessage, serverIp, serverPort);
     }
 
     public void SendJoinPacket(String NodeIp, int nodePort) throws Exception {
-        String tempMessage = protocol.join(this.ClientIp, this.ClientPort);
+        String tempMessage = protocol.join(RequestHandler.socket.getLocalAddress().getHostAddress(), RequestHandler.socket.getLocalPort());
         SendMessage(tempMessage, NodeIp, nodePort);
 
     }
 
     public void searchFile(String fileName) throws Exception {
-       
+
         String tempKeywords[] = fileName.split(" ");
         List<String> list;
         String fileList = "";
         for (int i = 0; i < tempKeywords.length; i++) {
             list = routingTable.getFileMap().get(tempKeywords[i]);
-           
+
             for (int j = 0; j < list.size(); j++) {
-                String tempFileName = list.get(i);
-                 System.out.println(tempFileName);
+                String tempFileName = list.get(j);
+                System.out.println(tempFileName);
                 if (!fileList.contains(tempFileName)) {
                     fileList += tempFileName + " ";
-                     System.out.println("Sankalpa");
-                    mainWindow.getDisplaySearchResult().append(tempFileName + " == " + this.ClientIp + ":" + this.ClientPort + "\n");
+                    System.out.println("Sankalpa");
+                    mainWindow.getDisplaySearchResult().append(tempFileName + " ==> " + RequestHandler.socket.getLocalAddress().getHostAddress()
+                            + ":" + RequestHandler.socket.getLocalPort() + "\n");
                 }
             }
         }
 
-        String tempMessage = protocol.searchFile(this.ClientIp, this.ClientPort, 0, fileName);
+        String tempMessage = protocol.searchFile(RequestHandler.socket.getLocalAddress().getHostAddress(), RequestHandler.socket.getLocalPort(), 0, fileName);
         Iterator<String> iterator = routingTable.getNeighbouringTable().keySet().iterator();
         String tempKey;
 
@@ -125,7 +108,7 @@ public class Client extends RequestHandler {
     }
 
     public void sendUnregisterRequest() throws Exception {
-        String tempMessage = protocol.unRegister(this.ClientIp, this.ClientPort, this.userName);
+        String tempMessage = protocol.unRegister(RequestHandler.socket.getLocalAddress().getHostAddress(), RequestHandler.socket.getLocalPort(), this.userName);
         SendMessage(tempMessage, serverIp, serverPort);
     }
 
