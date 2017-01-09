@@ -174,19 +174,19 @@ public class MessageDecoder extends RequestHandler {
         int hopCount = Integer.parseInt(buffer_1[buffer_1.length - 1]);
         String fileList = "";
         List<String> list;
-        hopCount++;
         if (hopCount <= DistributedConstants.defaultHops) {
             String[] keywords = fileName.split("_");
             for (int i = 0; i < keywords.length; i++) {
                 list = table.getFileMap().get(keywords[i]);
                 for (int j = 0; j < list.size(); j++) {
                     String tempFileName = list.get(i);
-                    if (fileList.contains(tempFileName)) {
+                    if (!fileList.contains(tempFileName)) {
                         fileList += tempFileName + " ";
                         fileCount++;
                     }
                 }
             }
+            hopCount++;
             String fileRequestMsg = protocol.searchFile(ipOfRequestedNode, portOfRequestedNode, hopCount, fileName);
             Iterator<String> iterator = table.getNeighbouringTable().keySet().iterator();
             String tempKey;
