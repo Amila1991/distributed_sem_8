@@ -68,8 +68,10 @@ public abstract class RequestHandler {
 
         while (keySet.hasNext()) {
             String key = keySet.next();
-            Object[] temp = {key, neighbourTable.get(key)};
-            mainWindow.getNeighbourTable().addRow(temp);
+            if (!neighbourTable.get(key).equals(DistributedConstants.disconnected)) {
+                Object[] temp = {key, neighbourTable.get(key)};
+                mainWindow.getNeighbourTable().addRow(temp);
+            }
         }
     }
 

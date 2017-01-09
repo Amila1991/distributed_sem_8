@@ -13,7 +13,8 @@ public class DistributedConstants {
 
     public static String connected = "Connected";
     public static String notConnected = "Not Connected";
-    public static String UnRegistered = "Unregistered";
+    public static String unRegistered = "Unregistered";
+    public static String disconnected = "Disconnected";
     public static int numberOfneighbours = 2;
     public static int defaultHops = 2;
 

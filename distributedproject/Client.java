@@ -80,15 +80,15 @@ public class Client extends RequestHandler {
         String fileList = "";
         for (int i = 0; i < tempKeywords.length; i++) {
             list = routingTable.getFileMap().get(tempKeywords[i]);
-
-            for (int j = 0; j < list.size(); j++) {
-                String tempFileName = list.get(j);
-                System.out.println(tempFileName);
-                if (!fileList.contains(tempFileName)) {
-                    fileList += tempFileName + " ";
-                    System.out.println("Sankalpa");
-                    mainWindow.getDisplaySearchResult().append(tempFileName + " ==> " + RequestHandler.clientIP
-                            + ":" + RequestHandler.socket.getLocalPort() + "\n");
+            if (list != null) {
+                for (int j = 0; j < list.size(); j++) {
+                    String tempFileName = list.get(j);
+                    System.out.println(tempFileName);
+                    if (!fileList.contains(tempFileName)) {
+                        fileList += tempFileName + " ";
+                        mainWindow.getDisplaySearchResult().append(tempFileName + " ==> " + RequestHandler.clientIP
+                                + ":" + RequestHandler.socket.getLocalPort() + "\n");
+                    }
                 }
             }
         }

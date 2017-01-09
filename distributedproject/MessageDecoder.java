@@ -65,11 +65,11 @@ public class MessageDecoder extends RequestHandler {
 
     private void unregisterResponse(String message) throws Exception {
         String buffer[] = message.split(" ");
-        if (buffer[2] == "0") {
+        if (buffer[2] == "9999") {
             /*
                 solution has to be a group decision
              */
-        } else if (buffer[2] == "1") {
+        } else if (buffer[2].equals("0")) {
             System.out.println("Unregistered");
 
             Iterator<String> iterator = table.getNeighbouringTable().keySet().iterator();
@@ -97,6 +97,7 @@ public class MessageDecoder extends RequestHandler {
             } else if (buffer[2] == "0") {
                 receivingEndState = DistributedConstants.connected;
                 table.updateNeighbourState(this.receivedIp, this.receivedPort, receivingEndState);
+                this.updateRoutingTable(table, mainWindow);
             }
         }
     }
@@ -109,7 +110,6 @@ public class MessageDecoder extends RequestHandler {
              */
         } else if (buffer[2] == "0") {
             System.out.println("Succesfully Left");
-
         }
     }
 //assume file hosted node directly communicate with requested node
