@@ -90,11 +90,11 @@ public class MessageDecoder extends RequestHandler {
         String receivingEndState = table.getNeighbouringTable().get(this.receivedIp + this.receivedPort);
         String buffer[] = message.split(" ");
         if (receivingEndState != null) {
-            if (buffer[2] == "9999") {
+            if (buffer[2].equals("9999")) {
                 /*
                 solution has to be a group decision
                  */
-            } else if (buffer[2] == "0") {
+            } else if (buffer[2].equals("0")) {
                 receivingEndState = DistributedConstants.connected;
                 table.updateNeighbourState(this.receivedIp, this.receivedPort, receivingEndState);
                 this.updateRoutingTable(table, mainWindow);
@@ -104,11 +104,11 @@ public class MessageDecoder extends RequestHandler {
 
     private void leaveResponse(String message) {
         String buffer[] = message.split(" ");
-        if (buffer[2] == "9999") {
+        if (buffer[2].equals("9999")) {
             /*
                 solution has to be a group decision
              */
-        } else if (buffer[2] == "0") {
+        } else if (buffer[2].equals("0")) {
             System.out.println("Succesfully Left");
         }
     }
