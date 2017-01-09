@@ -81,7 +81,7 @@ public class Client extends RequestHandler {
     // this is temporary method used to test the system
     // using this method call we can avoid the need of multiple PCs
     public void SendRegisterPacket() throws Exception {
-        String tempMessage = protocol.register(this.ClientIp, this.serverPort, this.userName);
+        String tempMessage = protocol.register(this.ClientIp, this.ClientPort, this.userName);
         SendMessage(tempMessage, serverIp, serverPort);
     }
 
