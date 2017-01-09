@@ -494,7 +494,7 @@ public class ControlPanel extends javax.swing.JFrame {
         int row = neighbourTable.getSelectedRow();
         String address[] = neighbourTable.getModel().getValueAt(row, 0).toString().split(":");
         String IP = address[0];
-        int port = Integer.parseInt(address[0]);
+        int port = Integer.parseInt(address[1]);
 //        int port = Integer.parseInt(neighbourTable.getModel().getValueAt(row, 1).toString());
         try {
             client.SendJoinPacket(IP, port);
