@@ -52,7 +52,6 @@ public class MessageDecoder extends RequestHandler {
     }
 
     private void registerResponse(String message) {
-        System.out.println(message);
         String buffer[] = message.split(" ");
         int neighboursCount = Integer.parseInt(buffer[2]);
 
@@ -98,7 +97,6 @@ public class MessageDecoder extends RequestHandler {
             } else if (buffer[2] == "0") {
                 receivingEndState = DistributedConstants.connected;
                 table.updateNeighbourState(this.receivedIp, this.receivedPort, receivingEndState);
-                System.out.println(this.receivedIp + ":" + this.receivedPort + " " + receivingEndState);
             }
         }
     }

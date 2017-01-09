@@ -37,7 +37,6 @@ public abstract class RequestHandler {
         this.mainWindow = mainWindow;
         try {
             RequestHandler.socket = new DatagramSocket();
-
             this.mainWindow.getTxtClientPort().setText("" + RequestHandler.socket.getLocalPort());
         } catch (SocketException ex) {
             Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
