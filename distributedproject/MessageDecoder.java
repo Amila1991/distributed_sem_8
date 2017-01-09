@@ -125,7 +125,7 @@ public class MessageDecoder extends RequestHandler {
             int requiredHops = Integer.parseInt(buffer[5]);
 
             for (int i = 0; i < fileCount; i++) {
-                mainWindow.getDisplaySearchResult().append(buffer[6 + i] + "\n");
+                mainWindow.getDisplaySearchResult().append(buffer[6 + i] + " == " + fileHostedNodeIP + ":" + fileHostedNodePort + "\n");
             }
         }
     }
