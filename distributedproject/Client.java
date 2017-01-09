@@ -83,7 +83,6 @@ public class Client extends RequestHandler {
             if (list != null) {
                 for (int j = 0; j < list.size(); j++) {
                     String tempFileName = list.get(j);
-                    System.out.println(tempFileName);
                     if (!fileList.contains(tempFileName)) {
                         fileList += tempFileName + " ";
                         mainWindow.getDisplaySearchResult().append(tempFileName + " ==> " + RequestHandler.clientIP

@@ -61,9 +61,9 @@ public abstract class RequestHandler {
     public void updateRoutingTable(RoutingTable table, ControlPanel mainWindow) {
         Map<String, String> neighbourTable = table.getNeighbouringTable();
         Iterator<String> keySet = neighbourTable.keySet().iterator();
-
-        for (int i = 0; i < mainWindow.getNeighbourTable().getRowCount(); i++) {
-            mainWindow.getNeighbourTable().removeRow(i);
+        int initialRowCount = mainWindow.getNeighbourTable().getRowCount();
+        for (int i = 0; i < initialRowCount; i++) {
+            mainWindow.getNeighbourTable().removeRow(0);
         }
 
         while (keySet.hasNext()) {

@@ -468,7 +468,6 @@ public class ControlPanel extends javax.swing.JFrame {
     private void joinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joinBtnActionPerformed
 
         int row = neighbourTable.getSelectedRow();
-        System.out.println(row);
         String address[] = neighbourTable.getModel().getValueAt(row, 0).toString().split(":");
         String IP = address[0];
         int port = Integer.parseInt(address[1]);

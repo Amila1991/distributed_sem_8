@@ -65,7 +65,7 @@ public class MessageDecoder extends RequestHandler {
 
     private void unregisterResponse(String message) throws Exception {
         String buffer[] = message.split(" ");
-        if (buffer[2] == "9999") {
+        if (buffer[2].equals("9999")) {
             /*
                 solution has to be a group decision
              */
@@ -87,7 +87,7 @@ public class MessageDecoder extends RequestHandler {
     }
 
     private void joinResponse(String message) {
-        String receivingEndState = table.getNeighbouringTable().get(this.receivedIp + this.receivedPort);
+        String receivingEndState = table.getNeighbouringTable().get(this.receivedIp + ":" + this.receivedPort);
         String buffer[] = message.split(" ");
         if (receivingEndState != null) {
             if (buffer[2].equals("9999")) {
