@@ -34,7 +34,7 @@ public class MessageDecoder extends RequestHandler {
 
         if (msg.contains("REGOK")) {
             registerResponse(msg);
-        } else if (msg.contains("UNREGOK")) {
+        } else if (msg.contains("UNROK")) {
             unregisterResponse(msg);
         } else if (msg.contains("JOINOK")) {
             joinResponse(msg);
@@ -65,6 +65,7 @@ public class MessageDecoder extends RequestHandler {
 
     private void unregisterResponse(String message) throws Exception {
         String buffer[] = message.split(" ");
+        System.out.println(message);
         if (buffer[2].equals("9999")) {
             /*
                 solution has to be a group decision
