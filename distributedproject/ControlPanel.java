@@ -509,7 +509,7 @@ public class ControlPanel extends javax.swing.JFrame {
         int ClientPort = Integer.parseInt(txtClientPort.getText());
         String userName = txtName.getText();
         try {
-            client.SendRegisterPacket(ClientIp, ClientPort, userName);
+            client.SendRegisterPacket();
         } catch (Exception ex) {
             Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
