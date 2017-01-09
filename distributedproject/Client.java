@@ -78,12 +78,6 @@ public class Client extends RequestHandler {
         routingTable = RoutingTable.getInstance();
     }
 
-    //this is the genuine method
-    public void SendRegisterPacket() throws Exception {
-        String tempMessage = protocol.register(ClientIp, ClientPort, userName);
-        SendMessage(tempMessage, serverIp, serverPort);
-    }
-
     // this is temporary method used to test the system
     // using this method call we can avoid the need of multiple PCs
     public void SendRegisterPacket(String Ip, int port, String userName) throws Exception {
@@ -93,7 +87,7 @@ public class Client extends RequestHandler {
     
     public void SendJoinPacket(String NodeIp, int nodePort) throws Exception {
         String tempMessage = protocol.join(NodeIp, nodePort);
-        SendMessage(tempMessage, serverIp, serverPort);
+        SendMessage(tempMessage, NodeIp, nodePort);
         
     }
     
