@@ -492,8 +492,10 @@ public class ControlPanel extends javax.swing.JFrame {
     private void joinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joinBtnActionPerformed
 
         int row = neighbourTable.getSelectedRow();
-        String IP = neighbourTable.getModel().getValueAt(row, 0).toString();
-        int port = Integer.parseInt(neighbourTable.getModel().getValueAt(row, 1).toString());
+        String address[] = neighbourTable.getModel().getValueAt(row, 0).toString().split(":");
+        String IP = address[0];
+        int port = Integer.parseInt(address[0]);
+//        int port = Integer.parseInt(neighbourTable.getModel().getValueAt(row, 1).toString());
         try {
             client.SendJoinPacket(IP, port);
         } catch (Exception ex) {

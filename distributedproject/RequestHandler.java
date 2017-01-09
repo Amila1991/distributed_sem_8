@@ -25,7 +25,7 @@ public abstract class RequestHandler {
     public void SetupSocket() {
         try {
             RequestHandler.socket = new DatagramSocket();
-            this.mainWindow.getTxtClientPort().setText("" + RequestHandler.socket.getPort());
+            this.mainWindow.getTxtClientPort().setText("" + RequestHandler.socket.getLocalPort());
         } catch (SocketException soe) {
             soe.printStackTrace();
         }
