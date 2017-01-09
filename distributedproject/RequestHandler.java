@@ -23,11 +23,21 @@ public abstract class RequestHandler {
 
     public ControlPanel mainWindow;
     public static DatagramSocket socket;
+    private String clientIP;
+
+    public String getClientIP() {
+        return clientIP;
+    }
+
+    public void setClientIP(String clientIP) {
+        this.clientIP = clientIP;
+    }
 
     public RequestHandler(ControlPanel mainWindow) {
         this.mainWindow = mainWindow;
         try {
             RequestHandler.socket = new DatagramSocket();
+
             this.mainWindow.getTxtClientPort().setText("" + RequestHandler.socket.getLocalPort());
         } catch (SocketException ex) {
             Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);

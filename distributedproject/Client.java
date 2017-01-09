@@ -20,42 +20,43 @@ import java.util.logging.Logger;
  * @author lahiru
  */
 public class Client extends RequestHandler {
-
+    
     private String serverIp = "";
     private int serverPort;
     private String userName = "";
-
+    
     public MessageDecoder msgDecoder;
     private final CommunicationProtocol protocol;
     private final RoutingTable routingTable;
-
+    
     public String getUserName() {
         return userName;
     }
-
+    
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
+    
     public String getServerIp() {
         return serverIp;
     }
-
+    
     public void setServerIp(String serverIp) {
         this.serverIp = serverIp;
     }
-
+    
     public int getServerPort() {
         return serverPort;
     }
-
+    
     public void setServerPort(int serverPort) {
         this.serverPort = serverPort;
     }
-
+    
     public Client(ControlPanel mainWindow) {
         super(mainWindow);
         msgDecoder = new MessageDecoder(mainWindow);
+        msgDecoder.setClientIP(this.getClientIP());
         protocol = CommunicationProtocol.getInstance();
         routingTable = RoutingTable.getInstance();
     }
@@ -63,40 +64,40 @@ public class Client extends RequestHandler {
     // this is temporary method used to test the system
     // using this method call we can avoid the need of multiple PCs
     public void SendRegisterPacket() throws Exception {
-        String tempMessage = protocol.register(RequestHandler.socket.getLocalAddress().getHostAddress(), RequestHandler.socket.getLocalPort(), this.userName);
+        String tempMessage = protocol.register(this.getClientIP(), RequestHandler.socket.getLocalPort(), this.userName);
         SendMessage(tempMessage, serverIp, serverPort);
     }
-
+    
     public void SendJoinPacket(String NodeIp, int nodePort) throws Exception {
-        String tempMessage = protocol.join(RequestHandler.socket.getLocalAddress().getHostAddress(), RequestHandler.socket.getLocalPort());
+        String tempMessage = protocol.join(RequestHandler.socket.getInetAddress().getHostAddress(), RequestHandler.socket.getLocalPort());
         SendMessage(tempMessage, NodeIp, nodePort);
-
+        
     }
-
+    
     public void searchFile(String fileName) throws Exception {
-
+        
         String tempKeywords[] = fileName.split(" ");
         List<String> list;
         String fileList = "";
         for (int i = 0; i < tempKeywords.length; i++) {
             list = routingTable.getFileMap().get(tempKeywords[i]);
-
+            
             for (int j = 0; j < list.size(); j++) {
                 String tempFileName = list.get(j);
                 System.out.println(tempFileName);
                 if (!fileList.contains(tempFileName)) {
                     fileList += tempFileName + " ";
                     System.out.println("Sankalpa");
-                    mainWindow.getDisplaySearchResult().append(tempFileName + " ==> " + RequestHandler.socket.getLocalAddress().getHostAddress()
+                    mainWindow.getDisplaySearchResult().append(tempFileName + " ==> " + this.getClientIP()
                             + ":" + RequestHandler.socket.getLocalPort() + "\n");
                 }
             }
         }
-
-        String tempMessage = protocol.searchFile(RequestHandler.socket.getLocalAddress().getHostAddress(), RequestHandler.socket.getLocalPort(), 0, fileName);
+        
+        String tempMessage = protocol.searchFile(this.getClientIP(), RequestHandler.socket.getLocalPort(), 0, fileName);
         Iterator<String> iterator = routingTable.getNeighbouringTable().keySet().iterator();
         String tempKey;
-
+        
         while (iterator.hasNext()) {
             tempKey = iterator.next();
             if (routingTable.getNeighbouringTable().get(tempKey).equals(DistributedConstants.connected)) {
@@ -104,14 +105,14 @@ public class Client extends RequestHandler {
                 SendMessage(tempMessage, temp[0], Integer.parseInt(temp[1]));
             }
         }
-
+        
     }
-
+    
     public void sendUnregisterRequest() throws Exception {
-        String tempMessage = protocol.unRegister(RequestHandler.socket.getLocalAddress().getHostAddress(), RequestHandler.socket.getLocalPort(), this.userName);
+        String tempMessage = protocol.unRegister(this.getClientIP(), RequestHandler.socket.getLocalPort(), this.userName);
         SendMessage(tempMessage, serverIp, serverPort);
     }
-
+    
     public void RunMessageGateway() {
         Thread T = new Thread() {
             public void run() {
@@ -124,7 +125,7 @@ public class Client extends RequestHandler {
         };
         T.start();
     }
-
+    
     public void whileRunning() throws Exception {
         DatagramPacket incomingPacket;
         while (true) {
@@ -136,5 +137,5 @@ public class Client extends RequestHandler {
             msgDecoder.DecodeMessage(s, incomingPacket.getAddress().getHostAddress(), incomingPacket.getPort());
         }
     }
-
+    
 }
